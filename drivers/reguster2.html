@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Driver Registration</title>
+
+<style>
+
+body {
+    font-family: Arial;
+    background: #eef7ff;
+    padding: 50px;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+}
+
+h1 {
+    color: #d71920;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.vehicle-row {
+    display: flex;
+    gap: 10px;
+}
+
+.vehicle-row input {
+    flex: 1;
+}
+
+#verifyVehicleBtn {
+    width: 180px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#verifyVehicleBtn:hover {
+    background: #111;
+}
+
+#verifyVehicleBtn:disabled {
+    background: #999;
+}
+
+#vehicleVerificationMessage {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#registerBtn {
+    width: 100%;
+    padding: 15px;
+    background: #d71920;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+#registerBtn:disabled {
+    background: #999;
+}
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚑 Driver Registration</h1>
+
+<form id="registerForm">
+
+<div class="form-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="full_name"
+required>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Mobile Number</label>
+
+<input
+type="tel"
+id="phone"
+maxlength="10"
+required>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+id="email">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+minlength="6"
+required>
+
+</div>
+
+
+<!-- AMBULANCE VERIFICATION -->
+
+<div class="form-group">
+
+<label>Ambulance Number</label>
+
+<div class="vehicle-row">
+
+<input
+type="text"
+id="ambulance_number"
+placeholder="Example: TS09AB1001"
+required>
+
+<button
+type="button"
+id="verifyVehicleBtn">
+
+Verify Ambulance
+
+</button>
+
+</div>
+
+<p id="vehicleVerificationMessage"></p>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Ambulance Type</label>
+
+<select id="ambulance_type" required>
+
+<option value="">Select type</option>
+
+<option value="Basic Life Support">
+Basic Life Support
+</option>
+
+<option value="Advanced Life Support">
+Advanced Life Support
+</option>
+
+<option value="ICU Ambulance">
+ICU Ambulance
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Driving Experience</label>
+
+<input
+type="number"
+id="experience_years"
+min="0"
+max="50"
+required>
+
+</div>
+
+
+<button
+type="submit"
+id="registerBtn"
+disabled>
+
+Register & Continue
+
+</button>
+
+<p id="message"></p>
+
+</form>
+
+</div>
+
+
+<script>
+
+let ambulanceVerified = false;
+
+
+const ambulanceInput =
+document.getElementById("ambulance_number");
+
+const verifyBtn =
+document.getElementById("verifyVehicleBtn");
+
+const verificationMessage =
+document.getElementById("vehicleVerificationMessage");
+
+const registerBtn =
+document.getElementById("registerBtn");
+
+
+/* Reset verification */
+
+ambulanceInput.addEventListener("input", function() {
+
+    ambulanceVerified = false;
+
+    registerBtn.disabled = true;
+
+    verificationMessage.innerText = "";
+
+});
+
+
+/* VERIFY AMBULANCE */
+
+verifyBtn.addEventListener("click", async function() {
+
+    const ambulanceNumber =
+        ambulanceInput.value
+        .trim()
+        .toUpperCase();
+
+
+    if (ambulanceNumber === "") {
+
+        verificationMessage.innerText =
+            "Please enter ambulance number.";
+
+        verificationMessage.style.color = "red";
+
+        return;
+    }
+
+
+    verifyBtn.disabled = true;
+
+    verifyBtn.innerText = "Verifying...";
+
+    verificationMessage.innerText =
+        "Checking vehicle...";
+
+    verificationMessage.style.color =
+        "orange";
+
+
+    try {
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "ambulance_number",
+            ambulanceNumber
+        );
+
+
+        const response =
+            await fetch(
+                "verify_ambulance.php",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "VERIFICATION RESULT:",
+            result
+        );
+
+
+        if (
+            result.success &&
+            result.verified
+        ) {
+
+            ambulanceVerified = true;
+
+            registerBtn.disabled = false;
+
+
+            verificationMessage.innerHTML =
+                "✅ Ambulance verified successfully." +
+                "<br>Type: " +
+                result.vehicle_type +
+                "<br>Emergency Service: YES" +
+                "<br>Status: ACTIVE";
+
+
+            verificationMessage.style.color =
+                "green";
+
+        }
+
+        else {
+
+            ambulanceVerified = false;
+
+            registerBtn.disabled = true;
+
+
+            verificationMessage.innerText =
+                "❌ " + result.message;
+
+
+            verificationMessage.style.color =
+                "red";
+
+        }
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "VERIFICATION ERROR:",
+            error
+        );
+
+
+        ambulanceVerified = false;
+
+        registerBtn.disabled = true;
+
+
+        verificationMessage.innerText =
+            "❌ Unable to connect to verification server.";
+
+
+        verificationMessage.style.color =
+            "red";
+
+    }
+
+
+    verifyBtn.disabled = false;
+
+    verifyBtn.innerText =
+        "Verify Ambulance";
+
+});
+
+
+/* REGISTRATION */
+
+document
+.getElementById("registerForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+
+    if (!ambulanceVerified) {
+
+        document.getElementById("message")
+        .innerText =
+        "Please verify your ambulance first.";
+
+        return;
+    }
+
+
+    const data = {
+
+        full_name:
+        document.getElementById("full_name").value.trim(),
+
+        phone:
+        document.getElementById("phone").value.trim(),
+
+        email:
+        document.getElementById("email").value.trim(),
+
+        password:
+        document.getElementById("password").value,
+
+        ambulance_number:
+        ambulanceInput.value.trim().toUpperCase(),
+
+        ambulance_type:
+        document.getElementById("ambulance_type").value,
+
+        experience_years:
+        document.getElementById("experience_years").value
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+                "driver_register.php",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:
+                    JSON.stringify(data)
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (result.success) {
+
+            localStorage.setItem(
+                "driver_phone",
+                data.phone
+            );
+
+            localStorage.setItem(
+                "registration_success",
+                "true"
+            );
+
+            if (result.driver_id) {
+
+                localStorage.setItem(
+                    "driver_id",
+                    result.driver_id
+                );
+
+            }
+
+
+            document.getElementById("message")
+            .innerText =
+            "Registration successful!";
+
+
+        }
+
+        else {
+
+            document.getElementById("message")
+            .innerText =
+            result.message;
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        document.getElementById("message")
+        .innerText =
+        "Unable to connect to server.";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

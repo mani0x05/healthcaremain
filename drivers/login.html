@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Login | Ambulance Service</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#eef7ff,#ffffff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:100%;
+    max-width:450px;
+    background:white;
+    padding:45px 40px;
+    border-radius:20px;
+    box-shadow:0 15px 45px rgba(0,0,0,.12);
+}
+
+.icon{
+    width:75px;
+    height:75px;
+    margin:0 auto 20px;
+    background:#fff0f0;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+}
+
+h1{
+    text-align:center;
+    color:#222;
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d8d8d8;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    background:#fafafa;
+}
+
+input:focus{
+    border-color:#d71920;
+    background:white;
+    box-shadow:0 0 0 3px rgba(215,25,32,.08);
+}
+
+button{
+    width:100%;
+    border:none;
+    padding:15px;
+    margin-top:5px;
+    border-radius:10px;
+    background:#d71920;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#b90f16;
+}
+
+button:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+#message{
+    text-align:center;
+    margin-top:15px;
+    min-height:20px;
+    font-size:14px;
+}
+
+.register{
+    text-align:center;
+    margin-top:22px;
+    color:#777;
+    font-size:14px;
+}
+
+.register a{
+    color:#d71920;
+    font-weight:600;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="icon">🚑</div>
+
+    <h1>Driver Login</h1>
+
+    <p class="subtitle">
+        Login to manage your ambulance service
+    </p>
+
+    <form id="loginForm">
+
+        <div class="input-group">
+            <label>Mobile Number</label>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="10-digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required>
+        </div>
+
+        <button type="submit" id="loginBtn">
+            Login
+        </button>
+
+        <p id="message"></p>
+
+    </form>
+
+    <div class="register">
+        New driver?
+        <a href="register.html">Create Account</a>
+    </div>
+
+</div>
+
+<script>
+
+const phoneInput = document.getElementById("phone");
+
+phoneInput.addEventListener("input", function(){
+    this.value = this.value.replace(/\D/g,"");
+});
+
+document.getElementById("loginForm").addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        const phone = phoneInput.value.trim();
+        const password =
+            document.getElementById("password").value;
+
+        const message =
+            document.getElementById("message");
+
+        const button =
+            document.getElementById("loginBtn");
+
+        if(!/^[6-9][0-9]{9}$/.test(phone)){
+            message.style.color="#d71920";
+            message.innerText=
+                "Enter a valid 10-digit mobile number.";
+            return;
+        }
+
+        button.disabled=true;
+        button.innerText="Logging in...";
+
+        try{
+
+            const response = await fetch(
+                "driver_login.php",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify({
+                        phone:phone,
+                        password:password
+                    })
+                }
+            );
+
+            const text = await response.text();
+
+            console.log("LOGIN SERVER:",text);
+
+            let result;
+
+            try{
+                result=JSON.parse(text);
+            }
+            catch(error){
+                message.style.color="#d71920";
+                message.innerText=
+                    "Server returned an invalid response.";
+                return;
+            }
+
+            if(result.success){
+
+                localStorage.setItem(
+                    "driver_id",
+                    result.driver_id
+                );
+
+                localStorage.setItem(
+                    "driver_phone",
+                    phone
+                );
+
+                localStorage.setItem(
+                    "driver_logged_in",
+                    "true"
+                );
+
+                message.style.color="green";
+                message.innerText=
+                    "Login successful!";
+
+                setTimeout(function(){
+                    window.location.href=
+                        "dashboard.html";
+                },700);
+
+            }
+            else{
+
+                message.style.color="#d71920";
+
+                message.innerText=
+                    result.message ||
+                    "Invalid mobile number or password.";
+            }
+
+        }
+        catch(error){
+
+            console.error("LOGIN ERROR:",error);
+
+            message.style.color="#d71920";
+
+            message.innerText=
+                "Unable to connect to server.";
+        }
+
+        button.disabled=false;
+        button.innerText="Login";
+    }
+);
+
+</script>
+
+</body>
+</html>

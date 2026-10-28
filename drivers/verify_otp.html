@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP | Ambulance Driver</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef7ff, #ffffff);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+
+            background: white;
+
+            padding: 45px 40px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,0.12);
+
+            text-align: center;
+        }
+
+
+        .icon {
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 20px;
+
+            background: #fff0f0;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 42px;
+        }
+
+
+        h1 {
+            color: #222;
+
+            font-size: 28px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .description {
+            color: #777;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+        }
+
+
+        .phone {
+            font-weight: 600;
+
+            color: #d71920;
+
+            margin-bottom: 25px;
+        }
+
+
+        .otp-container {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin: 20px 0;
+        }
+
+
+        .otp {
+            width: 48px;
+            height: 55px;
+
+            text-align: center;
+
+            font-size: 22px;
+
+            font-weight: 600;
+
+            border: 1px solid #d8d8d8;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fafafa;
+        }
+
+
+        .otp:focus {
+            border-color: #d71920;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(215,25,32,0.08);
+        }
+
+
+        #verifyBtn {
+            width: 100%;
+
+            border: none;
+
+            padding: 15px;
+
+            margin-top: 15px;
+
+            border-radius: 10px;
+
+            background: #d71920;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+
+        #verifyBtn:hover {
+            background: #b90f16;
+        }
+
+
+        #verifyBtn:disabled {
+            background: #999;
+
+            cursor: not-allowed;
+        }
+
+
+        .resend {
+            margin-top: 22px;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        .resend button {
+            border: none;
+
+            background: none;
+
+            color: #d71920;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        .resend button:disabled {
+            color: #999;
+
+            cursor: not-allowed;
+        }
+
+
+        #timer {
+            margin-top: 8px;
+
+            font-size: 13px;
+
+            color: #888;
+        }
+
+
+        #message {
+            margin-top: 18px;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            min-height: 20px;
+        }
+
+
+        .back {
+            display: block;
+
+            margin-top: 25px;
+
+            color: #777;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+
+        .back:hover {
+            color: #d71920;
+        }
+
+
+        @media (max-width: 500px) {
+
+            .container {
+                padding: 35px 22px;
+            }
+
+
+            .otp-container {
+                gap: 6px;
+            }
+
+
+            .otp {
+                width: 43px;
+                height: 50px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="icon">
+        🔐
+    </div>
+
+
+    <h1>
+        Verify Your Mobile
+    </h1>
+
+
+    <p class="description">
+        We have generated a 6-digit OTP for your
+        ambulance driver registration.
+    </p>
+
+
+    <div class="phone" id="phoneDisplay">
+        +91 **********
+    </div>
+
+
+
+    <!-- OTP INPUT -->
+
+    <div class="otp-container">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric"
+            autocomplete="one-time-code">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric">
+
+        <input
+            type="text"
+            class="otp"
+            maxlength="1"
+            inputmode="numeric">
+
+    </div>
+
+
+
+    <button
+        id="verifyBtn">
+
+        Verify OTP
+
+    </button>
+
+
+    <p id="message"></p>
+
+
+
+    <!-- RESEND -->
+
+    <div class="resend">
+
+        Didn't receive the OTP?
+
+        <button
+            id="resendBtn">
+
+            Resend OTP
+
+        </button>
+
+    </div>
+
+
+    <div id="timer">
+        OTP expires in 05:00
+    </div>
+
+
+
+    <a
+        href="register.html"
+        class="back">
+
+        ← Back to Registration
+
+    </a>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   GET PHONE FROM REGISTRATION
+========================================= */
+
+const phone =
+    localStorage.getItem("driver_phone");
+
+
+/* =========================================
+   CHECK PHONE
+========================================= */
+
+if (!phone) {
+
+    alert(
+        "Registration information not found. Please register again."
+    );
+
+    window.location.href =
+        "register.html";
+
+}
+
+
+
+/* =========================================
+   DISPLAY PHONE
+========================================= */
+
+if (phone) {
+
+    const maskedPhone =
+        phone.substring(0, 2) +
+        "******" +
+        phone.substring(8);
+
+    document.getElementById(
+        "phoneDisplay"
+    ).innerText =
+        "+91 " + maskedPhone;
+
+}
+
+
+
+/* =========================================
+   OTP INPUTS
+========================================= */
+
+const otpInputs =
+    document.querySelectorAll(".otp");
+
+
+otpInputs.forEach(
+    function(input, index) {
+
+
+        input.addEventListener(
+            "input",
+            function() {
+
+
+                this.value =
+                    this.value.replace(/\D/g, "");
+
+
+                if (
+                    this.value &&
+                    index <
+                    otpInputs.length - 1
+                ) {
+
+                    otpInputs[index + 1].focus();
+
+                }
+
+            }
+        );
+
+
+        input.addEventListener(
+            "keydown",
+            function(e) {
+
+
+                if (
+                    e.key === "Backspace" &&
+                    !this.value &&
+                    index > 0
+                ) {
+
+                    otpInputs[index - 1].focus();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =========================================
+   PASTE OTP
+========================================= */
+
+otpInputs[0].addEventListener(
+    "paste",
+    function(e) {
+
+        e.preventDefault();
+
+
+        const pasted =
+            e.clipboardData
+                .getData("text")
+                .replace(/\D/g, "")
+                .substring(0, 6);
+
+
+        pasted.split("")
+            .forEach(
+                function(char, index) {
+
+                    if (otpInputs[index]) {
+
+                        otpInputs[index].value =
+                            char;
+
+                    }
+
+                }
+            );
+
+
+        if (pasted.length === 6) {
+
+            otpInputs[5].focus();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================
+   GET OTP
+========================================= */
+
+function getOTP() {
+
+    let otp = "";
+
+    otpInputs.forEach(
+        function(input) {
+
+            otp += input.value;
+
+        }
+    );
+
+    return otp;
+
+}
+
+
+
+/* =========================================
+   VERIFY OTP
+========================================= */
+
+document
+    .getElementById("verifyBtn")
+    .addEventListener(
+        "click",
+        async function() {
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "verifyBtn"
+                );
+
+
+            const otp =
+                getOTP();
+
+
+
+            /* Check OTP */
+
+            if (otp.length !== 6) {
+
+                message.style.color =
+                    "#d71920";
+
+                message.innerText =
+                    "Please enter the complete 6-digit OTP.";
+
+                return;
+
+            }
+
+
+
+            button.disabled =
+                true;
+
+            button.innerText =
+                "Verifying...";
+
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "verify_otp.php",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    phone: phone,
+
+                                    otp: otp
+
+                                })
+
+                        }
+                    );
+
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server error: " +
+                        response.status
+                    );
+
+                }
+
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "OTP response:",
+                    result
+                );
+
+
+
+                /* SUCCESS */
+
+                if (result.success) {
+
+
+                    message.style.color =
+                        "green";
+
+
+                    message.innerText =
+                        "Mobile number verified successfully!";
+
+
+                    /* Save verification */
+
+                    localStorage.setItem(
+                        "phone_verified",
+                        "true"
+                    );
+
+
+                    /* Redirect */
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "login.html";
+
+                        },
+                        1000
+                    );
+
+                }
+
+
+                /* FAILED */
+
+                else {
+
+                    message.style.color =
+                        "#d71920";
+
+
+                    message.innerText =
+                        result.message ||
+                        "Invalid OTP.";
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "OTP Error:",
+                    error
+                );
+
+
+                message.style.color =
+                    "#d71920";
+
+
+                message.innerText =
+                    "Unable to connect to server. Please check XAMPP.";
+
+            }
+
+
+            button.disabled =
+                false;
+
+
+            button.innerText =
+                "Verify OTP";
+
+        }
+    );
+
+
+
+/* =========================================
+   RESEND OTP
+========================================= */
+
+document
+    .getElementById("resendBtn")
+    .addEventListener(
+        "click",
+        async function() {
+
+
+            const resendBtn =
+                document.getElementById(
+                    "resendBtn"
+                );
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            resendBtn.disabled =
+                true;
+
+
+            resendBtn.innerText =
+                "Sending...";
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "send_otp.php",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    phone: phone
+
+                                })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "Resend OTP response:",
+                    result
+                );
+
+
+                if (result.success) {
+
+
+                    message.style.color =
+                        "green";
+
+
+                    message.innerText =
+                        "New OTP generated successfully.";
+
+
+                    /*
+                        DEVELOPMENT MODE
+
+                        XAMPP testing lo
+                        OTP browser console lo
+                        chupistundi.
+                    */
+
+                    if (result.dev_otp) {
+
+                        console.log(
+                            "DEVELOPMENT OTP:",
+                            result.dev_otp
+                        );
+
+                        alert(
+                            "Development OTP: " +
+                            result.dev_otp
+                        );
+
+                    }
+
+
+                    startTimer();
+
+                }
+
+                else {
+
+                    message.style.color =
+                        "#d71920";
+
+                    message.innerText =
+                        result.message ||
+                        "Unable to resend OTP.";
+
+                    resendBtn.disabled =
+                        false;
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Resend OTP Error:",
+                    error
+                );
+
+
+                message.style.color =
+                    "#d71920";
+
+                message.innerText =
+                    "Unable to connect to server.";
+
+                resendBtn.disabled =
+                    false;
+
+            }
+
+
+            resendBtn.innerText =
+                "Resend OTP";
+
+        }
+    );
+
+
+
+/* =========================================
+   OTP TIMER
+========================================= */
+
+let timeLeft = 10;
+
+let timerInterval;
+
+
+
+function startTimer() {
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timeLeft = 10;
+
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    const resendBtn =
+        document.getElementById(
+            "resendBtn"
+        );
+
+
+    resendBtn.disabled =
+        true;
+
+
+    function updateTimer() {
+
+
+        const minutes =
+            Math.floor(
+                timeLeft / 60
+            );
+
+
+        const seconds =
+            timeLeft % 60;
+
+
+        timer.innerText =
+            "OTP expires in " +
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
+
+
+
+        if (timeLeft <= 0) {
+
+
+            clearInterval(
+                timerInterval
+            );
+
+
+            timer.innerText =
+                "OTP expired. Please request a new OTP.";
+
+
+            resendBtn.disabled =
+                false;
+
+
+            return;
+
+        }
+
+
+        timeLeft--;
+
+    }
+
+
+    updateTimer();
+
+
+    timerInterval =
+        setInterval(
+            updateTimer,
+            1000
+        );
+
+}
+
+
+
+/* Start timer */
+
+startTimer();
+
+
+/* Focus first OTP box */
+
+otpInputs[0].focus();
+
+</script>
+
+
+</body>
+
+</html>

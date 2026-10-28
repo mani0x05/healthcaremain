@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Driver Dashboard | Ambulance Service</title>
+
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f7fb;
+    color:#222;
+}
+
+
+/* HEADER */
+
+header{
+    background:#d71920;
+    color:white;
+    padding:18px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+}
+
+.logout{
+    border:none;
+    background:white;
+    color:#d71920;
+    padding:9px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+
+/* MAIN */
+
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:0 20px;
+}
+
+
+/* WELCOME */
+
+.welcome{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+    margin-bottom:20px;
+}
+
+.welcome h1{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.welcome p{
+    color:#777;
+}
+
+
+/* DRIVER INFO */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:20px;
+}
+
+.info-card{
+    background:white;
+    padding:22px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.info-card h3{
+    font-size:13px;
+    color:#888;
+    margin-bottom:8px;
+}
+
+.info-card p{
+    font-size:18px;
+    font-weight:600;
+}
+
+
+/* STATUS */
+
+.status-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+    margin-bottom:20px;
+}
+
+.status{
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.location{
+    color:#777;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.online{
+    color:#168b35;
+}
+
+.offline{
+    color:#d71920;
+}
+
+.status-btn{
+    border:none;
+    padding:14px 35px;
+    border-radius:10px;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.go-online{
+    background:#168b35;
+}
+
+.go-offline{
+    background:#d71920;
+}
+
+
+/* REQUEST */
+
+.request-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.request-card h2{
+    margin-bottom:15px;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#888;
+}
+
+
+/* REQUEST BOX */
+
+.booking-request{
+    border:2px solid #d71920;
+    border-radius:14px;
+    padding:20px;
+    margin-top:15px;
+    background:#fffafa;
+}
+
+.booking-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.booking-code{
+    font-weight:700;
+    color:#d71920;
+}
+
+.emergency{
+    background:#ffe5e5;
+    color:#d71920;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.booking-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.detail{
+    background:#f7f7f7;
+    padding:12px;
+    border-radius:8px;
+}
+
+.detail small{
+    display:block;
+    color:#888;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.detail strong{
+    font-size:15px;
+}
+
+
+.request-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:15px;
+}
+
+.accept-btn,
+.reject-btn{
+    flex:1;
+    padding:13px;
+    border:none;
+    border-radius:9px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.accept-btn{
+    background:#168b35;
+    color:white;
+}
+
+.accept-btn:hover{
+    background:#107128;
+}
+
+.reject-btn{
+    background:#d71920;
+    color:white;
+}
+
+.reject-btn:hover{
+    background:#b9141a;
+}
+
+.call-btn{
+    display:block;
+    text-align:center;
+    margin-top:12px;
+    padding:11px;
+    border-radius:8px;
+    background:#222;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+
+/* ACCEPTED */
+
+.accepted-box{
+    border:2px solid #168b35;
+    background:#f0fff4;
+    padding:20px;
+    border-radius:14px;
+    margin-top:15px;
+}
+
+.accepted-box h3{
+    color:#168b35;
+    margin-bottom:12px;
+}
+
+.accepted-box p{
+    margin:7px 0;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:750px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .booking-info{
+        grid-template-columns:1fr;
+    }
+
+    .request-buttons{
+        flex-direction:column;
+    }
+
+    header{
+        padding:15px 20px;
+    }
+
+}
+
+
+.accepted-box{
+    border:2px solid #168b35;
+    background:#f0fff4;
+    padding:20px;
+    border-radius:14px;
+    margin-top:15px;
+}
+
+.accepted-box h3{
+    color:#168b35;
+    margin-bottom:15px;
+}
+
+.booking-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.booking-detail{
+    background:white;
+    padding:12px;
+    border-radius:9px;
+    border:1px solid #d9eadf;
+}
+
+.booking-detail small{
+    display:block;
+    color:#777;
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.booking-detail strong{
+    font-size:15px;
+    word-break:break-word;
+}
+
+.live-badge{
+    display:inline-block;
+    background:#168b35;
+    color:white;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.action-btn{
+    width:100%;
+    border:none;
+    padding:14px;
+    border-radius:9px;
+    color:white;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.track-btn{background:#00897b;}
+.specialized-btn{background:#1976d2;}
+.stop-ride-btn{background:#d71920;}
+
+@media(max-width:750px){
+    .booking-details{grid-template-columns:1fr;}
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        🚑 Healthcare Driver
+    </div>
+
+    <button
+        class="logout"
+        onclick="logout()">
+
+        Logout
+
+    </button>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1 id="welcomeText">
+            Welcome Driver
+        </h1>
+
+        <p>
+            Manage your ambulance availability and bookings.
+        </p>
+
+    </div>
+
+
+    <!-- DRIVER INFORMATION -->
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <h3>
+                AMBULANCE NUMBER
+            </h3>
+
+            <p id="ambulanceNumber">
+                Loading...
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3>
+                AMBULANCE TYPE
+            </h3>
+
+            <p id="ambulanceType">
+                Loading...
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3>
+                EXPERIENCE
+            </h3>
+
+            <p id="experience">
+                Loading...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ONLINE / OFFLINE -->
+
+    <div class="status-card">
+
+        <div
+            id="statusText"
+            class="status offline">
+
+            🔴 OFFLINE
+
+        </div>
+
+
+        <div
+            id="locationText"
+            class="location">
+
+            📍 Location sharing is OFF
+
+        </div>
+
+
+        <button
+            id="statusBtn"
+            class="status-btn go-online"
+            onclick="toggleStatus()">
+
+            GO ONLINE
+
+        </button>
+
+    </div>
+
+
+    <!-- BOOKING REQUESTS -->
+
+    <div class="request-card">
+
+        <h2>
+            🔔 Booking Requests
+        </h2>
+
+
+        <div
+            class="empty"
+            id="requestArea">
+
+            No active booking requests.
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================================
+   CHECK LOGIN
+========================================= */
+
+const driverId =
+    localStorage.getItem("driver_id");
+
+const loggedIn =
+    localStorage.getItem("driver_logged_in");
+
+
+if(
+    !driverId ||
+    loggedIn !== "true"
+){
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================
+   VARIABLES
+========================================= */
+
+let isOnline = false;
+
+let locationWatcher = null;
+
+let requestTimer = null;
+
+let currentRequests = [];
+let acceptedBookingCode = "";
+let acceptedBookingData = {};
+let rideAccepted = false;
+
+
+/* =========================================
+   LOAD DRIVER PROFILE
+========================================= */
+
+async function loadProfile(){
+
+    try{
+
+        const response = await fetch(
+            "get_driver_profile.php?id=" + encodeURIComponent(driverId)
+        );
+
+        const result = await response.json();
+
+        if(result.success){
+
+            const driver = result.driver;
+
+            document.getElementById("welcomeText").innerText =
+                "Welcome, " + driver.full_name;
+
+            document.getElementById("ambulanceNumber").innerText =
+                driver.ambulance_number;
+
+            document.getElementById("ambulanceType").innerText =
+                driver.ambulance_type;
+
+            document.getElementById("experience").innerText =
+                driver.experience_years + " Years";
+
+            // Restore an accepted ride after browser/page refresh.
+            const savedRide = localStorage.getItem(
+                "accepted_booking_" + driverId
+            );
+
+            if(savedRide){
+                try{
+                    const saved = JSON.parse(savedRide);
+                    acceptedBookingCode = saved.booking_code || "";
+                    acceptedBookingData = saved.patient || {};
+                    if(acceptedBookingCode){
+                        rideAccepted = true;
+                        showAcceptedBooking(saved);
+                        stopRequestPolling();
+                    }
+                }catch(e){
+                    localStorage.removeItem("accepted_booking_" + driverId);
+                }
+            }
+
+            if(driver.status === "online"){
+                setOnlineUI();
+                startLocationTracking();
+                if(!rideAccepted){
+                    startRequestPolling();
+                }
+            }
+        }
+
+    }catch(error){
+        console.error("PROFILE ERROR:", error);
+    }
+}
+
+
+/* =========================================
+   TOGGLE STATUS
+========================================= */
+
+async function toggleStatus(){
+
+    if(!isOnline){
+
+        await goOnline();
+
+    }
+    else{
+
+        await goOffline();
+
+    }
+
+}
+
+
+/* =========================================
+   GO ONLINE
+========================================= */
+
+async function goOnline(){
+
+    if(!navigator.geolocation){
+
+        alert(
+            "Your browser does not support GPS."
+        );
+
+        return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function(position){
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            try{
+
+                const response =
+                    await fetch(
+                        "update_driver_status.php",
+                        {
+                            method:"POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:JSON.stringify({
+
+                                driver_id:
+                                    driverId,
+
+                                status:
+                                    "online",
+
+                                latitude:
+                                    latitude,
+
+                                longitude:
+                                    longitude
+
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "STATUS:",
+                    result
+                );
+
+
+                if(result.success){
+
+                    setOnlineUI();
+
+                    startLocationTracking();
+
+                    startRequestPolling();
+
+                }
+                else{
+
+                    alert(
+                        result.message ||
+                        "Unable to go online."
+                    );
+
+                }
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                alert(
+                    "Server connection error."
+                );
+
+            }
+
+        },
+
+        function(){
+
+            alert(
+                "Please allow location access to go online."
+            );
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000,
+            maximumAge:0
+        }
+
+    );
+
+}
+
+
+/* =========================================
+   ONLINE UI
+========================================= */
+
+function setOnlineUI(){
+
+    isOnline = true;
+
+
+    const status =
+        document.getElementById(
+            "statusText"
+        );
+
+
+    const button =
+        document.getElementById(
+            "statusBtn"
+        );
+
+
+    const location =
+        document.getElementById(
+            "locationText"
+        );
+
+
+    status.className =
+        "status online";
+
+
+    status.innerText =
+        "🟢 ONLINE";
+
+
+    location.innerText =
+        "📍 Live location sharing is ON";
+
+
+    button.className =
+        "status-btn go-offline";
+
+
+    button.innerText =
+        "GO OFFLINE";
+
+}
+
+
+/* =========================================
+   GO OFFLINE
+========================================= */
+
+async function goOffline(){
+
+    try{
+
+        const response =
+            await fetch(
+                "update_driver_status.php",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        driver_id:
+                            driverId,
+
+                        status:
+                            "offline"
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(result.success){
+
+            isOnline = false;
+
+
+            stopLocationTracking();
+
+            stopRequestPolling();
+
+
+            document.getElementById(
+                "statusText"
+            ).className =
+                "status offline";
+
+
+            document.getElementById(
+                "statusText"
+            ).innerText =
+                "🔴 OFFLINE";
+
+
+            document.getElementById(
+                "locationText"
+            ).innerText =
+                "📍 Location sharing is OFF";
+
+
+            const button =
+                document.getElementById(
+                    "statusBtn"
+                );
+
+
+            button.className =
+                "status-btn go-online";
+
+
+            button.innerText =
+                "GO ONLINE";
+
+        }
+        else{
+
+            alert(
+                result.message ||
+                "Unable to go offline."
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Server connection error."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   LIVE GPS TRACKING
+========================================= */
+
+function startLocationTracking(){
+
+    if(locationWatcher !== null){
+
+        return;
+
+    }
+
+
+    locationWatcher =
+        navigator.geolocation.watchPosition(
+
+            function(position){
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+
+                updateLocation(
+                    latitude,
+                    longitude
+                );
+
+            },
+
+            function(error){
+
+                console.error(
+                    "GPS ERROR:",
+                    error
+                );
+
+            },
+
+            {
+                enableHighAccuracy:true,
+                maximumAge:5000,
+                timeout:10000
+            }
+
+        );
+
+}
+
+
+/* =========================================
+   SEND LOCATION
+========================================= */
+
+async function updateLocation(
+    latitude,
+    longitude
+){
+
+    try{
+
+        const response =
+            await fetch(
+                "update_driver_location.php",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        driver_id:
+                            driverId,
+
+                        latitude:
+                            latitude,
+
+                        longitude:
+                            longitude
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "LOCATION:",
+            result
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "LOCATION ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   STOP GPS
+========================================= */
+
+function stopLocationTracking(){
+
+    if(locationWatcher !== null){
+
+        navigator.geolocation.clearWatch(
+            locationWatcher
+        );
+
+        locationWatcher = null;
+
+    }
+
+}
+
+
+/* =========================================
+   START REQUEST POLLING
+========================================= */
+
+function startRequestPolling(){
+
+    // NEVER poll while a ride is accepted.
+    if(requestTimer !== null || rideAccepted){
+        return;
+    }
+
+    checkBookingRequests();
+
+    requestTimer = setInterval(
+        checkBookingRequests,
+        5000
+    );
+}
+
+
+/* =========================================
+   STOP REQUEST POLLING
+========================================= */
+
+function stopRequestPolling(){
+
+    if(requestTimer !== null){
+
+        clearInterval(
+            requestTimer
+        );
+
+        requestTimer = null;
+
+    }
+
+}
+
+
+/* =========================================
+   CHECK BOOKING REQUESTS
+========================================= */
+
+async function checkBookingRequests(){
+
+    if(!isOnline || rideAccepted){
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                "get_driver_requests.php",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        driver_id:
+                            driverId
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "REQUESTS:",
+            result
+        );
+
+
+        if(result.success){
+
+            currentRequests =
+                result.requests || [];
+
+
+            displayRequests(
+                currentRequests
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "REQUEST ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   DISPLAY REQUESTS
+========================================= */
+
+function displayRequests(
+    requests
+){
+
+    const area =
+        document.getElementById(
+            "requestArea"
+        );
+
+
+    if(!requests || requests.length === 0){
+
+        area.innerHTML =
+            "No active booking requests.";
+
+        area.className =
+            "empty";
+
+        return;
+
+    }
+
+
+    area.className = "";
+
+
+    let html = "";
+
+
+    requests.forEach(
+        function(request){
+
+            html += `
+
+                <div class="booking-request">
+
+                    <div class="booking-header">
+
+                        <span class="booking-code">
+
+                            🚑 ${escapeHtml(
+                                request.booking_code
+                            )}
+
+                        </span>
+
+                        <span class="emergency">
+
+                            ${escapeHtml(
+                                request.emergency_type
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="booking-info">
+
+                        <div class="detail">
+
+                            <small>
+                                PATIENT
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(
+                                    request.patient_name
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                CONTACT
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(
+                                    request.patient_phone
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                PICKUP
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(
+                                    request.pickup_address ||
+                                    "GPS Location"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                HOSPITAL
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(
+                                    request.hospital_name ||
+                                    "Not specified"
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        class="call-btn"
+                        href="tel:${escapeHtml(
+                            request.patient_phone
+                        )}">
+
+                        📞 Call Patient
+
+                    </a>
+
+
+                    <div class="request-buttons">
+
+                        <button
+                            class="reject-btn"
+                            onclick="rejectBooking(
+                                ${request.booking_id}
+                            )">
+
+                            ❌ REJECT
+
+                        </button>
+
+
+                        <button
+                            class="accept-btn"
+                            onclick="acceptBooking(
+                                ${request.booking_id}
+                            )">
+
+                            ✅ ACCEPT
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    area.innerHTML =
+        html;
+
+}
+
+
+/* =========================================
+   ACCEPT BOOKING
+========================================= */
+
+async function acceptBooking(
+    bookingId
+){
+
+    if(rideAccepted){
+        return;
+    }
+
+    if(!confirm("Accept this ambulance booking?")){
+        return;
+    }
+
+    try{
+
+        const response = await fetch("accept_booking.php", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                driver_id:driverId,
+                booking_id:bookingId
+            })
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+
+            // Lock this driver to the accepted ride.
+            rideAccepted = true;
+            acceptedBookingCode = result.booking_code || "";
+            acceptedBookingData = result.patient || {};
+
+            localStorage.setItem(
+                "accepted_booking_" + driverId,
+                JSON.stringify(result)
+            );
+
+            stopRequestPolling();
+            currentRequests = [];
+
+            showAcceptedBooking(result);
+
+            alert("✅ Booking accepted. New requests are paused until STOP RIDE.");
+
+        }else{
+            alert(result.message || "Unable to accept booking.");
+            if(!rideAccepted){
+                checkBookingRequests();
+            }
+        }
+
+    }catch(error){
+        console.error("ACCEPT ERROR:", error);
+        alert("Server connection error.");
+    }
+}
+
+
+/* =========================================
+   REJECT BOOKING
+========================================= */
+
+async function rejectBooking(
+    bookingId
+){
+
+    if(!confirm(
+        "Reject this ambulance request?"
+    )){
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                "reject_booking.php",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        driver_id:
+                            driverId,
+
+                        booking_id:
+                            bookingId
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "REJECT:",
+            result
+        );
+
+
+        if(result.success){
+
+            alert(
+                "Request rejected."
+            );
+
+
+            checkBookingRequests();
+
+        }
+        else{
+
+            alert(
+                result.message ||
+                "Unable to reject request."
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Server connection error."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   SHOW ACCEPTED BOOKING
+========================================= */
+
+function showAcceptedBooking(
+    result
+){
+
+    const area = document.getElementById("requestArea");
+    const patient = result.patient || {};
+
+    acceptedBookingCode = result.booking_code || acceptedBookingCode || "";
+    acceptedBookingData = patient;
+    rideAccepted = !!acceptedBookingCode;
+
+    const pickupAddress = patient.pickup_address || "Pickup location not available";
+    const hospital = patient.hospital || "Not specified";
+    const latitude = patient.pickup_latitude ?? patient.latitude ?? "";
+    const longitude = patient.pickup_longitude ?? patient.longitude ?? "";
+
+    area.className = "";
+    area.innerHTML = `
+        <div class="accepted-box">
+            <span class="live-badge">🟢 ACTIVE RIDE</span>
+            <h3>✅ Booking Accepted</h3>
+
+            <div class="booking-details">
+                <div class="booking-detail">
+                    <small>BOOKING ID</small>
+                    <strong>${escapeHtml(acceptedBookingCode || "N/A")}</strong>
+                </div>
+                <div class="booking-detail">
+                    <small>PATIENT NAME</small>
+                    <strong>${escapeHtml(patient.name || "N/A")}</strong>
+                </div>
+                <div class="booking-detail">
+                    <small>PATIENT PHONE</small>
+                    <strong>${escapeHtml(patient.phone || "N/A")}</strong>
+                </div>
+                <div class="booking-detail">
+                    <small>EMERGENCY</small>
+                    <strong>${escapeHtml(patient.emergency || "N/A")}</strong>
+                </div>
+                <div class="booking-detail">
+                    <small>PICKUP LOCATION</small>
+                    <strong>${escapeHtml(pickupAddress)}</strong>
+                </div>
+                <div class="booking-detail">
+                    <small>HOSPITAL</small>
+                    <strong>${escapeHtml(hospital)}</strong>
+                </div>
+            </div>
+
+            <a class="call-btn" href="tel:${escapeHtml(patient.phone || "")}">
+                📞 CALL PATIENT
+            </a>
+
+            <button class="action-btn track-btn" onclick="trackUserLocation()">
+                📍 TRACK USER LOCATION
+            </button>
+
+            <button class="action-btn specialized-btn" onclick="checkSpecializedHospital()">
+                🏥 CHECK SPECIALIZED HOSPITAL
+            </button>
+
+            <button class="action-btn stop-ride-btn" onclick="stopRide()">
+                🛑 STOP RIDE / COMPLETE TRIP
+            </button>
+        </div>
+    `;
+
+    // Keep booking details and actions visible; polling will not overwrite them.
+    const hospitalBtn = document.getElementById("specializedHospitalBtn");
+    if(hospitalBtn){
+        hospitalBtn.style.display = acceptedBookingCode ? "block" : "none";
+    }
+}
+
+
+/* =========================================
+   TRACK USER / PICKUP LOCATION
+========================================= */
+function trackUserLocation(){
+
+    if(!acceptedBookingCode){
+        alert("No accepted booking found.");
+        return;
+    }
+
+    const patient = acceptedBookingData || {};
+    const latitude = patient.pickup_latitude ?? patient.latitude ?? "";
+    const longitude = patient.pickup_longitude ?? patient.longitude ?? "";
+    const address = patient.pickup_address || "";
+
+    let destination = "";
+    if(latitude !== "" && longitude !== ""){
+        destination = latitude + "," + longitude;
+    }else if(address){
+        destination = address;
+    }else{
+        alert("Patient pickup location is not available.");
+        return;
+    }
+
+    const mapsUrl =
+        "https://www.google.com/maps/dir/?api=1" +
+        "&destination=" + encodeURIComponent(destination) +
+        "&travelmode=driving";
+
+    window.open(mapsUrl, "_blank");
+}
+
+
+/* =========================================
+   CHECK SPECIALIZED HOSPITAL
+========================================= */
+function checkSpecializedHospital(){
+
+    if(!acceptedBookingCode){
+        alert("Booking ID not found.");
+        return;
+    }
+
+    // Booking ID is automatically passed. Driver does not type it.
+    window.location.href =
+        "hospital_finder.php?booking_code=" +
+        encodeURIComponent(acceptedBookingCode);
+}
+
+
+/* =========================================
+   STOP / COMPLETE RIDE
+========================================= */
+async function stopRide(){
+
+    if(!acceptedBookingCode){
+        return;
+    }
+
+    if(!confirm("Stop and complete this ride?")){
+        return;
+    }
+
+    try{
+        const response = await fetch("stop_ride.php", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                driver_id:driverId,
+                booking_code:acceptedBookingCode
+            })
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+            localStorage.removeItem("accepted_booking_" + driverId);
+            acceptedBookingCode = "";
+            acceptedBookingData = {};
+            rideAccepted = false;
+            currentRequests = [];
+
+            const hospitalBtn = document.getElementById("specializedHospitalBtn");
+            if(hospitalBtn){
+                hospitalBtn.style.display = "none";
+            }
+
+            document.getElementById("requestArea").className = "empty";
+            document.getElementById("requestArea").innerHTML =
+                "Ride completed. Waiting for new booking requests...";
+
+            // Driver stays ONLINE; only the accepted ride is stopped.
+            if(isOnline){
+                startRequestPolling();
+            }
+
+            alert("✅ Ride completed. Driver is ready for the next booking.");
+        }else{
+            alert(result.message || "Unable to stop the ride.");
+        }
+
+    }catch(error){
+        console.error("STOP RIDE ERROR:", error);
+        alert("Server connection error.");
+    }
+}
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function escapeHtml(
+    value
+){
+
+    if(value === null ||
+       value === undefined){
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logout(){
+
+    localStorage.removeItem("accepted_booking_" + driverId);
+
+    if(isOnline){
+
+        goOffline();
+
+    }
+
+
+    stopRequestPolling();
+
+
+    localStorage.removeItem(
+        "driver_logged_in"
+    );
+
+
+    localStorage.removeItem(
+        "driver_id"
+    );
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+loadProfile();
+
+/* =========================
+   LOAD BOOKING REQUESTS
+========================= */
+
+async function loadBookingRequests(){
+
+    const driverId =
+        localStorage.getItem("driver_id");
+
+    if(!driverId){
+
+        return;
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                "http://localhost/Healthcare%20Drivers/get_driver_requests.php",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        driver_id:
+                            parseInt(driverId)
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Booking Requests:",
+            result
+        );
+
+
+        const container =
+            document.getElementById(
+                "bookingRequests"
+            );
+
+
+        if(!container){
+
+            return;
+        }
+
+
+        if(
+            !result.success ||
+            !result.requests ||
+            result.requests.length === 0
+        ){
+
+            container.innerHTML =
+                "No active booking requests.";
+
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        result.requests.forEach(
+            function(request){
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "booking-request";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        🚑 New Ambulance Request
+                    </h3>
+
+                    <p>
+                        <strong>Booking:</strong>
+                        ${request.booking_code}
+                    </p>
+
+                    <p>
+                        <strong>Patient:</strong>
+                        ${request.patient_name}
+                    </p>
+
+                    <p>
+                        <strong>Contact:</strong>
+                        ${request.patient_phone}
+                    </p>
+
+                    <p>
+                        <strong>Emergency:</strong>
+                        ${request.emergency_type}
+                    </p>
+
+                    <p>
+                        <strong>Pickup:</strong>
+                        ${request.pickup_address || "GPS Location"}
+                    </p>
+
+                    <p>
+                        <strong>Hospital:</strong>
+                        ${request.hospital_name || "Not specified"}
+                    </p>
+
+                    <p class="request-time">
+                        Requested:
+                        ${request.sent_at}
+                    </p>
+
+                    <div class="request-buttons">
+
+                        <button
+                            class="accept-btn"
+                            onclick="acceptBooking(${request.booking_id})">
+
+                            ✅ ACCEPT
+
+                        </button>
+
+
+                        <button
+                            class="reject-btn"
+                            onclick="rejectBooking(${request.request_id})">
+
+                            ❌ REJECT
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(card);
+
+            }
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Request loading error:",
+            error
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

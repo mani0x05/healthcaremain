@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Driver Registration | Ambulance Service</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #eef7ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    color: #d71920;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full {
+    grid-column: span 2;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    font-size: 15px;
+}
+
+.vehicle-row {
+    display: flex;
+    gap: 10px;
+}
+
+.vehicle-row input {
+    flex: 1;
+}
+
+#verifyVehicleBtn {
+    width: 170px;
+    border: none;
+    border-radius: 9px;
+    background: #333;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#verifyVehicleBtn:hover {
+    background: #111;
+}
+
+#verifyVehicleBtn:disabled {
+    background: #999;
+}
+
+#vehicleVerificationMessage {
+    margin-top: 8px;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+#registerBtn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 9px;
+    background: #d71920;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#registerBtn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login a {
+    color: #d71920;
+    font-weight: bold;
+}
+
+@media(max-width:700px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: span 1;
+    }
+
+    .vehicle-row {
+        flex-direction: column;
+    }
+
+    #verifyVehicleBtn {
+        width: 100%;
+        padding: 13px;
+    }
+
+    .container {
+        padding: 25px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚑 Driver Registration</h1>
+
+<p class="subtitle">
+Create your ambulance driver account
+</p>
+
+<form id="registerForm">
+
+<div class="form-grid">
+
+<div class="input-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="full_name"
+placeholder="Enter your full name"
+required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Mobile Number</label>
+
+<input
+type="tel"
+id="phone"
+placeholder="10-digit mobile number"
+maxlength="10"
+required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Create password"
+minlength="6"
+required>
+
+</div>
+
+
+<div class="input-group full">
+
+<label>Ambulance Number</label>
+
+<div class="vehicle-row">
+
+<input
+type="text"
+id="ambulance_number"
+placeholder="Example: TS09AB1001"
+autocomplete="off"
+required>
+
+<button
+type="button"
+id="verifyVehicleBtn">
+
+Verify Ambulance
+
+</button>
+
+</div>
+
+<p id="vehicleVerificationMessage"></p>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Ambulance Type</label>
+
+<select id="ambulance_type" required>
+
+<option value="">
+Select ambulance type
+</option>
+
+<option value="Basic Life Support">
+Basic Life Support
+</option>
+
+<option value="Advanced Life Support">
+Advanced Life Support
+</option>
+
+<option value="ICU Ambulance">
+ICU Ambulance
+</option>
+
+</select>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Driving Experience</label>
+
+<input
+type="number"
+id="experience_years"
+min="0"
+max="50"
+placeholder="Years"
+required>
+
+</div>
+
+</div>
+
+
+<button
+type="submit"
+id="registerBtn"
+disabled>
+
+Register & Continue →
+
+</button>
+
+<p id="message"></p>
+
+</form>
+
+
+<div class="login">
+
+Already registered?
+<a href="login.html">Driver Login</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+let ambulanceVerified = false;
+
+
+const ambulanceInput =
+document.getElementById("ambulance_number");
+
+const verifyBtn =
+document.getElementById("verifyVehicleBtn");
+
+const verificationMessage =
+document.getElementById("vehicleVerificationMessage");
+
+const registerBtn =
+document.getElementById("registerBtn");
+
+
+/* Reset verification if number changes */
+
+ambulanceInput.addEventListener("input", function() {
+
+    ambulanceVerified = false;
+
+    registerBtn.disabled = true;
+
+    verificationMessage.innerText = "";
+
+});
+
+
+/* VERIFY AMBULANCE */
+
+verifyBtn.addEventListener("click", async function() {
+
+    const ambulanceNumber =
+        ambulanceInput.value.trim().toUpperCase();
+
+    if (ambulanceNumber === "") {
+
+        verificationMessage.innerText =
+            "Please enter ambulance number.";
+
+        verificationMessage.style.color = "red";
+
+        return;
+    }
+
+    verifyBtn.disabled = true;
+
+    verifyBtn.innerText = "Verifying...";
+
+    verificationMessage.innerText =
+        "Checking vehicle...";
+
+    verificationMessage.style.color = "orange";
+
+    ambulanceVerified = false;
+
+    registerBtn.disabled = true;
+
+
+    try {
+
+        const formData = new FormData();
+
+        formData.append(
+            "ambulance_number",
+            ambulanceNumber
+        );
+
+
+        const response = await fetch(
+            "verify_ambulance.php",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Verification result:",
+            result
+        );
+
+
+        if (
+            result.success &&
+            result.verified
+        ) {
+
+            ambulanceVerified = true;
+
+            registerBtn.disabled = false;
+
+            verificationMessage.innerHTML =
+                "✅ Ambulance verified successfully." +
+                "<br>Type: " +
+                result.vehicle_type +
+                "<br>Emergency Service: YES" +
+                "<br>Status: ACTIVE";
+
+            verificationMessage.style.color =
+                "green";
+
+        }
+
+        else {
+
+            ambulanceVerified = false;
+
+            registerBtn.disabled = true;
+
+            verificationMessage.innerText =
+                "❌ " +
+                result.message;
+
+            verificationMessage.style.color =
+                "red";
+        }
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        ambulanceVerified = false;
+
+        registerBtn.disabled = true;
+
+        verificationMessage.innerText =
+            "❌ Unable to connect to verification server.";
+
+        verificationMessage.style.color =
+            "red";
+    }
+
+
+    verifyBtn.disabled = false;
+
+    verifyBtn.innerText =
+        "Verify Ambulance";
+
+});
+
+
+/* REGISTRATION */
+
+document
+.getElementById("registerForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const message =
+        document.getElementById("message");
+
+
+    if (!ambulanceVerified) {
+
+        message.innerText =
+            "Please verify your ambulance first.";
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    const phone =
+        document.getElementById("phone")
+        .value.trim();
+
+
+    if (!/^[6-9][0-9]{9}$/.test(phone)) {
+
+        message.innerText =
+            "Enter a valid 10-digit Indian mobile number.";
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    const data = {
+
+        full_name:
+            document.getElementById("full_name")
+            .value.trim(),
+
+        phone: phone,
+
+
+        password:
+            document.getElementById("password")
+            .value,
+
+        ambulance_number:
+            ambulanceInput.value
+            .trim()
+            .toUpperCase(),
+
+        ambulance_type:
+            document.getElementById("ambulance_type")
+            .value,
+
+        experience_years:
+            document.getElementById("experience_years")
+            .value
+
+    };
+
+
+    registerBtn.disabled = true;
+
+    registerBtn.innerText =
+        "Creating Account...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "driver_register.php",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(data)
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (result.success) {
+
+            localStorage.setItem(
+                "driver_phone",
+                phone
+            );
+
+            if (result.driver_id) {
+
+                localStorage.setItem(
+                    "driver_id",
+                    result.driver_id
+                );
+            }
+
+            localStorage.setItem(
+                "registration_success",
+                "true"
+            );
+
+
+            message.innerText =
+                "Registration successful! Redirecting...";
+
+            message.style.color = "green";
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "registration_success.html";
+
+            }, 700);
+
+        }
+
+        else {
+
+            message.innerText =
+                result.message ||
+                "Registration failed.";
+
+            message.style.color = "red";
+
+        }
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        message.innerText =
+            "Unable to connect to server.";
+
+        message.style.color = "red";
+
+    }
+
+
+    registerBtn.disabled =
+        !ambulanceVerified;
+
+    registerBtn.innerText =
+        "Register & Continue →";
+
+});
+
+</script>
+
+</body>
+
+</html>
